@@ -26,10 +26,10 @@ namespace SocialNetworkSimulation
             System.Console.Read();
         }
 
-        static BidirectionalGraph<Vertex, Edge<Vertex>> ImportGraphFromFile()
+        static BidirectionalGraph<string, Edge<string>> ImportGraphFromFile()
         {
             // Create Graph To Be Returned
-            var graph = new BidirectionalGraph<Vertex, Edge<Vertex>>(false);
+            var graph = new BidirectionalGraph<string, Edge<string>>(true);
 
             // Initial Directory Setup
             var dataPath = Environment.CurrentDirectory + "/Data/";
@@ -46,15 +46,15 @@ namespace SocialNetworkSimulation
                 var weight = csv.GetField<int>(2);
 
                 // Vertices And Edges To Graph
-                var v1 = new Vertex(source);
+                var v1 = source;
                 if (!graph.ContainsVertex(v1))
                     graph.AddVertex(v1);
 
-                var v2 = new Vertex(target);
+                var v2 = target;
                 if(!graph.ContainsVertex(v2))
                     graph.AddVertex(v2);
 
-                var e1 = new Edge<Vertex>(v1, v2, weight);
+                var e1 = new Edge<string>(v1, v2, weight);
                 if(!graph.ContainsEdge(e1))
                     graph.AddEdge(e1);
             }
