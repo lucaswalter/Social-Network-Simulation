@@ -23,6 +23,55 @@ namespace SocialNetworkSimulation
 
             // Project Input
             var graph = ImportGraphFromFile();
+
+            // Calculate In-Degree Unweighted Graph
+            // TODO: Create Graph Off Of Data
+            var numberOfVerticesByInDegree = new Dictionary<int, int>();
+
+            foreach (var v in graph.Vertices)
+            {
+
+                var degree = graph.InDegree(v);
+
+                if (numberOfVerticesByInDegree.ContainsKey(degree))
+                {
+                    int tempValue;
+                    numberOfVerticesByInDegree.TryGetValue(degree, out tempValue);
+                    numberOfVerticesByInDegree.Remove(degree);
+                    numberOfVerticesByInDegree.Add(degree, tempValue + 1);
+                }
+                else
+                {
+                    numberOfVerticesByInDegree.Add(degree, 1);
+                }
+            }
+
+            // Calculate Out-Degree Unweighted Graph
+            var numberOfVerticesByOutDegree = new Dictionary<int, int>();
+
+            foreach (var v in graph.Vertices)
+            {
+
+                var degree = graph.OutDegree(v);
+
+                if (numberOfVerticesByOutDegree.ContainsKey(degree))
+                {
+                    int tempValue;
+                    numberOfVerticesByOutDegree.TryGetValue(degree, out tempValue);
+                    numberOfVerticesByOutDegree.Remove(degree);
+                    numberOfVerticesByOutDegree.Add(degree, tempValue + 1);
+                }
+                else
+                {
+                    numberOfVerticesByInDegree.Add(degree, 1);
+                }
+            }
+
+            // Calculate Im-Degree Weighted Graph
+
+            // Calculate Out-Degree Weighted Graph
+
+
             System.Console.Read();
         }
 
@@ -51,18 +100,18 @@ namespace SocialNetworkSimulation
                     graph.AddVertex(v1);
 
                 var v2 = target;
-                if(!graph.ContainsVertex(v2))
+                if (!graph.ContainsVertex(v2))
                     graph.AddVertex(v2);
 
                 var e1 = new Edge<string>(v1, v2, weight);
-                if(!graph.ContainsEdge(e1))
+                if (!graph.ContainsEdge(e1))
                     graph.AddEdge(e1);
             }
 
             return graph;
         }
 
-        /** Custom Data Structer Helper Classes **/
+        /** Custom Data Structure Helper Classes **/
 
         public class Vertex
         {
