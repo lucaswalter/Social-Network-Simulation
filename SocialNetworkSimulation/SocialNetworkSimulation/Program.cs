@@ -30,7 +30,6 @@ namespace SocialNetworkSimulation
 
             foreach (var v in graph.Vertices)
             {
-
                 var degree = graph.InDegree(v);
 
                 if (numberOfVerticesByInDegree.ContainsKey(degree))
@@ -63,14 +62,59 @@ namespace SocialNetworkSimulation
                 }
                 else
                 {
-                    numberOfVerticesByInDegree.Add(degree, 1);
+                    numberOfVerticesByOutDegree.Add(degree, 1);
                 }
             }
 
             // Calculate Im-Degree Weighted Graph
+            var numberOfVerticesByWeightedInDegree = new Dictionary<int, int>();
+
+            foreach (var v in graph.Vertices)
+            {
+                var edges = graph.Edges.Where(e => e.Target == v);
+                var edgeSum = 0;
+
+                foreach (var e in edges)
+                    edgeSum += e.weight;
+
+                if (numberOfVerticesByWeightedInDegree.ContainsKey(edgeSum))
+                {
+                    int tempValue;
+                    numberOfVerticesByWeightedInDegree.TryGetValue(edgeSum, out tempValue);
+                    numberOfVerticesByWeightedInDegree.Remove(edgeSum);
+                    numberOfVerticesByWeightedInDegree.Add(edgeSum, tempValue + 1);
+                }
+                else
+                {
+                    numberOfVerticesByWeightedInDegree.Add(edgeSum, 1);
+                }
+            }
+
+
 
             // Calculate Out-Degree Weighted Graph
+            var numberOfVerticesByWeightedOutDegree = new Dictionary<int, int>();
 
+            foreach (var v in graph.Vertices)
+            {
+                var edges = graph.Edges.Where(e => e.Source == v);
+                var edgeSum = 0;
+
+                foreach (var e in edges)
+                    edgeSum += e.weight;
+
+                if (numberOfVerticesByWeightedOutDegree.ContainsKey(edgeSum))
+                {
+                    int tempValue;
+                    numberOfVerticesByWeightedOutDegree.TryGetValue(edgeSum, out tempValue);
+                    numberOfVerticesByWeightedOutDegree.Remove(edgeSum);
+                    numberOfVerticesByWeightedOutDegree.Add(edgeSum, tempValue + 1);
+                }
+                else
+                {
+                    numberOfVerticesByWeightedOutDegree.Add(edgeSum, 1);
+                }
+            }
 
             System.Console.Read();
         }
