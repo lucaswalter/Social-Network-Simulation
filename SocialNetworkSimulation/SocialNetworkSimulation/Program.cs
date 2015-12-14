@@ -24,6 +24,8 @@ namespace SocialNetworkSimulation
             // Project Input
             var graph = ImportGraphFromFile();
 
+            var undirectedGraph = ImportUndirectedGraphFromFile();
+
             // Calculate Weighted/Unweighted In-Out Degrees
             calculateInOutDegrees(graph);
 
@@ -32,7 +34,7 @@ namespace SocialNetworkSimulation
         static BidirectionalGraph<string, Edge<string>> ImportGraphFromFile()
         {
             // Create Graph To Be Returned
-            var graph = new BidirectionalGraph<string, Edge<string>>(true);
+            var graph = new BidirectionalGraph<string, Edge<string>>(false);
 
             // Initial Directory Setup
             var dataPath = Environment.CurrentDirectory + "/Data/";
@@ -60,6 +62,42 @@ namespace SocialNetworkSimulation
                 var e1 = new Edge<string>(v1, v2, weight);
                 if (!graph.ContainsEdge(e1))
                     graph.AddEdge(e1);
+            }
+
+            return graph;
+        }
+
+        static BidirectionalGraph<string, Edge<string>> ImportUndirectedGraphFromFile()
+        {
+            // Create Graph To Be Returned
+            var graph = new BidirectionalGraph<string, Edge<string>>(true);
+
+            // Initial Directory Setup
+            var dataPath = Environment.CurrentDirectory + "/Data/";
+            var file = new StreamReader(dataPath + "Data.txt");
+            var csv = new CsvReader(file);
+
+            var edges = new List<Edge<Vertex>>();
+
+            while (csv.Read())
+            {
+                // Read CSV Data
+                var source = csv.GetField<string>(0);
+                var target = csv.GetField<string>(1);
+                var weight = csv.GetField<int>(2);
+
+                // Vertices And Edges To Graph
+                var v1 = source;
+                graph.AddVertex(v1);
+
+                var v2 = target;
+                graph.AddVertex(v2);
+
+                // Duplicate Each Edge Both Ways
+                var e1 = new Edge<string>(v1, v2, weight);
+                var e2 = new Edge<string>(v2, v1, weight);
+                graph.AddEdge(e1);
+                graph.AddEdge(e2);
             }
 
             return graph;
