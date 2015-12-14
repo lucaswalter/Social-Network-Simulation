@@ -24,6 +24,52 @@ namespace SocialNetworkSimulation
             // Project Input
             var graph = ImportGraphFromFile();
 
+            // Calculate Weighted/Unweighted In-Out Degrees
+            calculateInOutDegrees(graph);
+
+        }
+
+        static BidirectionalGraph<string, Edge<string>> ImportGraphFromFile()
+        {
+            // Create Graph To Be Returned
+            var graph = new BidirectionalGraph<string, Edge<string>>(true);
+
+            // Initial Directory Setup
+            var dataPath = Environment.CurrentDirectory + "/Data/";
+            var file = new StreamReader(dataPath + "Data.txt");
+            var csv = new CsvReader(file);
+
+            var edges = new List<Edge<Vertex>>();
+
+            while (csv.Read())
+            {
+                // Read CSV Data
+                var source = csv.GetField<string>(0);
+                var target = csv.GetField<string>(1);
+                var weight = csv.GetField<int>(2);
+
+                // Vertices And Edges To Graph
+                var v1 = source;
+                if (!graph.ContainsVertex(v1))
+                    graph.AddVertex(v1);
+
+                var v2 = target;
+                if (!graph.ContainsVertex(v2))
+                    graph.AddVertex(v2);
+
+                var e1 = new Edge<string>(v1, v2, weight);
+                if (!graph.ContainsEdge(e1))
+                    graph.AddEdge(e1);
+            }
+
+            return graph;
+        }
+
+        /** Data Calculation Functions **/
+
+        static void calculateInOutDegrees(BidirectionalGraph<string, Edge<string>> graph)
+        {
+
             // Calculate In-Degree Unweighted Graph
             // TODO: Create Graph Off Of Data
             var numberOfVerticesByInDegree = new Dictionary<int, int>();
@@ -90,8 +136,6 @@ namespace SocialNetworkSimulation
                 }
             }
 
-
-
             // Calculate Out-Degree Weighted Graph
             var numberOfVerticesByWeightedOutDegree = new Dictionary<int, int>();
 
@@ -115,44 +159,6 @@ namespace SocialNetworkSimulation
                     numberOfVerticesByWeightedOutDegree.Add(edgeSum, 1);
                 }
             }
-
-            System.Console.Read();
-        }
-
-        static BidirectionalGraph<string, Edge<string>> ImportGraphFromFile()
-        {
-            // Create Graph To Be Returned
-            var graph = new BidirectionalGraph<string, Edge<string>>(true);
-
-            // Initial Directory Setup
-            var dataPath = Environment.CurrentDirectory + "/Data/";
-            var file = new StreamReader(dataPath + "Data.txt");
-            var csv = new CsvReader(file);
-
-            var edges = new List<Edge<Vertex>>();
-
-            while (csv.Read())
-            {
-                // Read CSV Data
-                var source = csv.GetField<string>(0);
-                var target = csv.GetField<string>(1);
-                var weight = csv.GetField<int>(2);
-
-                // Vertices And Edges To Graph
-                var v1 = source;
-                if (!graph.ContainsVertex(v1))
-                    graph.AddVertex(v1);
-
-                var v2 = target;
-                if (!graph.ContainsVertex(v2))
-                    graph.AddVertex(v2);
-
-                var e1 = new Edge<string>(v1, v2, weight);
-                if (!graph.ContainsEdge(e1))
-                    graph.AddEdge(e1);
-            }
-
-            return graph;
         }
 
         /** Custom Data Structure Helper Classes **/
