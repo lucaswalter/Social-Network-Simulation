@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QuickGraph;
-using QuickGraph.Algorithms;
 using System.IO;
 using CsvHelper;
 using System.Diagnostics.Contracts;
@@ -34,14 +33,7 @@ namespace SocialNetworkSimulation
 
             // Unweighted Closeness Centrality Calculation Undirected
             calculateClosenessCentrality(undirectedGraph);
-
-
-
-
-
         }
-
-
 
         static BidirectionalGraph<string, Edge<string>> ImportGraphFromFile()
         {
@@ -210,6 +202,8 @@ namespace SocialNetworkSimulation
                 }
             }
         }
+
+
 
         static void calculateClosenessCentrality(BidirectionalGraph<string, Edge<string>> graph)
         {
